@@ -15,18 +15,13 @@ limitations under the License.
 -}
 module Term.ANSI exposing
   ( Format, defaultFormat, format, Color(..), Buffer, parseEscaped)
-
-import Html
-import Html.Attributes as Attributes
-import Parser exposing (Parser, (|=))
-import Set
 {-|
 ## Parsing Strings with ANSI-escape codes.
 This module contains functions to parse strings with
 [ANSI-encoded data](https://en.wikipedia.org/wiki/ANSI_escape_code).
 The main function for this purpose is `parseEscaped`:
-@ docs parseEscaped
-
+@docs parseEscaped
+@docs Buffer
 This module does not expose the core parsers as part of its API, but feel free
 to look at the source code.
 
@@ -35,7 +30,17 @@ This package supports most of the basic SGR function parameters. All of these
 possible configurations are represented by the `Format` record:
 @docs Format
 @docs Color
+@docs defaultFormat
+
+You can use Term.receive to handle most ANSI-escaped data.
+However, if you want to get the HTML node directly, you can use `format`.
+@docs format
 -}
+
+import Html
+import Html.Attributes as Attributes
+import Parser exposing (Parser, (|=))
+import Set
 
 {-
   token from a stream of data with ANSI escape values
@@ -115,7 +120,11 @@ type alias Format =
   }
 
 
-{- The default Format for text. -}
+{-| The default Format for text. The `Default` foreground and background colors
+refer to [SGR codes](https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters) 39 and 49, respectively.
+In practice, these codes usually mean white for the foreground, and black for
+the background.
+-}
 defaultFormat : Format
 defaultFormat =
   { foreground = Default
@@ -158,7 +167,8 @@ type Color
   | BrightWhite
 
 
-{-| Apply a format to a string of content, producing an HTML node. -}
+{-| Apply a Format to a string of content, producing an HTML node.
+-}
 format : Format -> String -> Html.Html msg
 format fmt cntnt =
   let

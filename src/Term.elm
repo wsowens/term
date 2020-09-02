@@ -19,7 +19,6 @@ module Term exposing (Term, Connection, withFormat, offline, new, receive, rende
 # Definition
 @docs Term
 @docs Connection
-@docs Event
 
 # Creating Terms
 @docs withFormat
