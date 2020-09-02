@@ -3,7 +3,7 @@ module Main exposing (..)
 import Browser
 import Html
 import Term exposing (Term)
-import ANSI exposing (defaultFormat)
+import Term.ANSI exposing (defaultFormat)
 import Debug
 
 -- MAIN
@@ -27,7 +27,7 @@ init : () -> (Model, Cmd Msg)
 init flags =
   (Model myTerm, Cmd.none)
 
-myTerm = Term.offline (Just { defaultFormat | foreground = ANSI.Green }) UserInput
+myTerm = Term.offline (Just { defaultFormat | foreground = Term.ANSI.Green }) UserInput
 
 -- UPDATE
 
