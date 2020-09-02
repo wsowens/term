@@ -15,9 +15,9 @@ import Term
 ```
 
 ## Documentation
-I recommend looking at the examples on (GitHub)[insert link].
+I recommend looking at the examples on [GitHub](link coming soon).
 
-You can find the API documentation on (Elm's website)[https://package.elm-lang.org/packages/wsowens/term/latest].
+You can find the API documentation on [Elm's website](https://package.elm-lang.org/packages/wsowens/term/latest)
 
 ## License
 This project is licensed under the Apache License. See [LICENSE](./LICENSE) for details.
