@@ -30,7 +30,6 @@ module Term exposing (Term, Connection, withFormat, offline, new, receive, rende
 @docs receive
 @docs render
 -}
-
 import Array
 import Browser
 import Browser.Dom as Dom
@@ -40,8 +39,7 @@ import Html.Events as Events
 import Json.Decode as Decode exposing (Decoder)
 import Task
 
-
-import ANSI exposing (defaultFormat)
+import Term.ANSI as ANSI
 
 
 -- BASIC TERM TYPES
