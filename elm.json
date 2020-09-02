@@ -1,15 +1,12 @@
 {
-    "name": "wsowens/term",
     "type": "package",
+    "name": "wsowens/term",
     "summary": "A terminal emulator with ANSI escape code parsing",
     "license": "Apache-2.0",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "exposed-modules": [
         "Term",
         "Term.ANSI"
-    ],
-    "source-directories": [
-        "src"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {
@@ -18,10 +15,9 @@
         "elm/html": "1.0.0 <= v < 2.0.0",
         "elm/json": "1.0.0 <= v < 2.0.0",
         "elm/parser": "1.0.0 <= v < 2.0.0",
-        "elm/url": "1.0.0 <= v < 2.0.0",
         "elm/time": "1.0.0 <= v < 2.0.0",
+        "elm/url": "1.0.0 <= v < 2.0.0",
         "elm/virtual-dom": "1.0.0 <= v < 2.0.0"
     },
-    "test-dependencies": {
-    }
+    "test-dependencies": {}
 }

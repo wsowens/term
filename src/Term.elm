@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -}
-module Term exposing (Term, Connection, withFormat, offline, new, receive, render)
+module Term exposing (Term, Connection(..), withFormat, offline, new, receive, render)
 
 {-| This module contains the basic term type.
 # Definition
@@ -62,7 +62,8 @@ type alias Term msg =
   , events : Handlers msg
   }
 
-{-| `Connection` represents the
+{-| A `Connection` can be used to information about what a `Term` is connected
+to.
 -}
 type Connection
   = Open String
@@ -157,6 +158,7 @@ appendBuffer buf term =
 
 {-| Emits HTML code for a Term. This can be used in a typical view function
 for your application, for example:
+
     view : Model -> Html.Html msg
     view model =
       Html.div [ ]
