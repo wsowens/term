@@ -3,7 +3,7 @@ An Elm package for working with ANSI-encoded colors and formatting.
 
 Because Elm 19.0 does not allow any way for packages to interact with Websockets, I'm afraid I must deliver this terminal with some assembly required.
 
-If you want a terminal that works right out of the box, see [ws-term](add link to working github example).
+If you want a terminal that works right out of the box, see [wsterm](https://github.com/wsowens/wsterm).
 
 ## Installation / Getting Started
 Simply run the following command to add this package to your project:

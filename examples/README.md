@@ -2,7 +2,7 @@
 Hi! Thanks for checking out this project.
 I hope that one day, Elm will allow me to package these terminal emulators with websockets, so that you can immediately connect to a websocket server and be on with your day.
 
-If that's what you're interested in, check out [ws-term](add link to working github example).
+If that's what you're interested in, check out [ws-term](https://github.com/wsowens/wsterm).
 
 Otherwise, let's play with some examples.
 

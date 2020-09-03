@@ -48,11 +48,11 @@ render a chat log. The fields of a `Term` are as follows:
 - `status` any current information about the connection
 - `log` stores all of the previously received messages (already encoded into
 HTML)
-- `format` stores the current format that the Term will apply to incoming
+- `format` stores the current format that the `Term` will apply to incoming
 messages
 - `events` stores functions to trigger if the user attempts to submit input
 or connect to a new address
-Rather than create a Term directly, I recommend using the functions in the
+Rather than create a `Term` directly, I recommend using the functions in the
 section below.
 -}
 type alias Term msg =
@@ -156,7 +156,7 @@ appendBuffer buf term =
 
 
 
-{-| Emits HTML code for a Term. This can be used in a typical view function
+{-| Emits HTML code for a `Term`. This can be used in a typical `view` function
 for your application, for example:
 
     view : Model -> Html.Html msg
