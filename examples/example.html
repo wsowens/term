@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Load the compiled JavaScript -->
+  <script src="example.js" type="application/javascript"></script>
+  <!-- Load the latest CSS. -->
+  <link rel="stylesheet" href="example.css">
+  <!-- 
+    Alternatively, you can load the latest CSS from my GitHub repository via jsDelivr: 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wsowens/wsterm/dist/wsterm.min.css">
+   -->
+</head>
+<body>
+  <div id="my-example-term"></div>
+  <script>
+    var app = Elm.Main.init({
+      node: document.getElementById("my-example-term")
+    });
+  </script>
+</body>
+</html>
