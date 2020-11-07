@@ -39,7 +39,7 @@ However, if you want to get the HTML node directly, you can use `format`.
 
 import Html
 import Html.Attributes as Attributes
-import Parser exposing (Parser, (|=))
+import Parser exposing (Parser, (|=), (|.))
 import Set
 
 {-
@@ -71,6 +71,16 @@ content =
     , reserved = Set.empty
     }
 
+{- Integer parser that accepts leading zeroes. -}
+leadingZero : Parser Int
+leadingZero = 
+  Parser.andThen (\s ->
+    if s == ""
+    then Parser.int
+    -- we might have just chomped a zero
+    else Parser.oneOf [Parser.int, Parser.succeed 0]
+  ) (Parser.getChompedString (Parser.chompWhile (\c -> c == '0')))
+
 
 {- For parsing the parameters of an SGR command, i.e. "\u{001b}[4;31m" -}
 sgr : Parser Token
@@ -81,7 +91,7 @@ sgr =
     , separator = ";"
     , end = "m"
     , spaces = Parser.succeed () -- no characters are considered 'spaces'
-    , item = Parser.int
+    , item = leadingZero
     , trailing = Parser.Forbidden
     }
 
@@ -350,7 +360,7 @@ current format state will be updated.
 -}
 consumeToken : Token -> Buffer msg -> Buffer msg
 consumeToken tok buf =
-  case tok of
+  case (Debug.log "token: " tok) of
     SGR codes ->
       case buf.format of
         Just fmt ->
@@ -381,5 +391,34 @@ formatting but start with the default Format state.)
 parseEscaped : Maybe Format -> String -> Buffer msg
 parseEscaped fmt data =
   case (Parser.run token data) of
-    Err (deadEnd) -> Buffer [ Html.text (Parser.deadEndsToString deadEnd) ] fmt
+    Err (deadEnd) -> Buffer [ Html.text (Debug.log "uh-oh" (deadEndsToString deadEnd)) ] fmt
     Ok tokens -> processTokens fmt tokens
+
+{- Workaround for the unimplemented Parser.deadEndsToString function -}
+deadEndsToString : List Parser.DeadEnd -> String
+deadEndsToString deadEnds =
+  String.concat (List.intersperse "; " (List.map deadEndToString deadEnds))
+
+
+deadEndToString : Parser.DeadEnd -> String
+deadEndToString deadend = 
+  problemToString deadend.problem ++ " at row " ++ String.fromInt deadend.row ++ ", col " ++ String.fromInt deadend.col
+
+
+problemToString : Parser.Problem -> String 
+problemToString p = 
+  case p of 
+   Parser.Expecting s -> "expecting '" ++ s ++ "'"
+   Parser.ExpectingInt -> "expecting int" 
+   Parser.ExpectingHex -> "expecting hex" 
+   Parser.ExpectingOctal -> "expecting octal" 
+   Parser.ExpectingBinary -> "expecting binary" 
+   Parser.ExpectingFloat -> "expecting float" 
+   Parser.ExpectingNumber -> "expecting number" 
+   Parser.ExpectingVariable -> "expecting variable" 
+   Parser.ExpectingSymbol s -> "expecting symbol '" ++ s ++ "'"
+   Parser.ExpectingKeyword s -> "expecting keyword '" ++ s ++ "'"
+   Parser.ExpectingEnd -> "expecting end" 
+   Parser.UnexpectedChar -> "unexpected char" 
+   Parser.Problem s -> "problem " ++ s 
+   Parser.BadRepeat -> "bad repeat" 

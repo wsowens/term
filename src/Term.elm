@@ -117,7 +117,7 @@ offline fmt onInput =
     )
 
 {-| Create a `Term` with complete configuration.
-For details on `fmt` and `onInput`, see the `static` above. This function also
+For details on `fmt` and `onInput`, see `withFormat` above. This function also
 accepts another Msg type, `onConnect`. Similar to `onInput`, whatever Msg you
 provide for `onConnect` will fire when the user presses enter after typing in
 the URL bar.
@@ -132,9 +132,6 @@ new status fmt onConnect onInput =
       (connectHelper onConnect)
       (inputHelper onInput)
     )
-
-
-
 
 
 {-| Send an ANSI-escaped message to the Term. Produces a term with an updated
