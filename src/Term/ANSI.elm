@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -}
 module Term.ANSI exposing
-  ( Format, defaultFormat, format, Color(..), Buffer, parseEscaped)
+  ( Format, defaultFormat, format, Color(..), Buffer, parseEscaped )
 {-|
 ## Parsing Strings with ANSI-escape codes.
 This module contains functions to parse strings with
@@ -50,7 +50,7 @@ import Set
 type Token
   = Content String  -- a normal bit of text to be formatted
   | SGR (List Int)  -- 'set graphics rendition'
-
+  | Unsupported String (List String)
 
 
 -- PARSERS
@@ -95,6 +95,34 @@ sgr =
     , trailing = Parser.Forbidden
     }
 
+{- Parse a single character -}
+parseChar : Parser String
+parseChar =
+  Parser.getChompedString <| Parser.chompIf (always True)
+  
+
+{- This should catch other, unsupported commands.
+   These might be supported in the future.
+ -}
+unsupported : Parser Token
+unsupported =
+  Parser.succeed Unsupported
+  |. Parser.symbol "\u{001b}"
+  -- get the opcode
+  |= parseChar 
+  -- get any arguments
+  |= Parser.sequence
+    { start = "" 
+    , separator = ";"
+    , spaces = Parser.succeed ()
+    , end = ""
+    , item = Parser.variable 
+      {start = (always True)
+      , inner = (\c -> c /= ';' && c /= '\u{0007}')
+      , reserved = Set.empty
+      }
+    , trailing = Parser.Forbidden
+    }
 
 {- complete parser for a stream of ANSI tokens -}
 token : Parser (List Token)
@@ -103,7 +131,7 @@ token =
   { start = ""
   , separator = ""
   , end = ""
-  , item = Parser.oneOf [ sgr, content ]
+  , item = Parser.oneOf [ sgr, content, unsupported ]
   , spaces = Parser.succeed ()
   , trailing = Parser.Optional
   }
@@ -370,6 +398,7 @@ consumeToken tok buf =
     Content cntent ->
         let fmt = Maybe.withDefault defaultFormat buf.format in
         { buf | nodes = (format fmt cntent) :: buf.nodes }
+    Unsupported opcode args -> buf
 
 
 {-| Process a stream tokens, returning a Buffer with the final format state
